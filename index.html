@@ -1,0 +1,1323 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="SOLV3D Impresiones 3D en Buenos Aires. Filamento y resina, maquetas, prototipos, repuestos. Más de 10 años de experiencia.">
+<title>SOLV3D — Impresiones 3D</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --black: #0a0a0a;
+    --dark: #111111;
+    --panel: #161616;
+    --border: #2a2a2a;
+    --border-bright: #3d3d3d;
+    --orange: #ff5c1a;
+    --orange-dim: #cc4a14;
+    --orange-glow: rgba(255,92,26,0.15);
+    --white: #f0ece4;
+    --grey: #888880;
+    --grey-light: #c0bbb0;
+    --font-display: 'Bebas Neue', sans-serif;
+    --font-body: 'Rajdhani', sans-serif;
+    --font-mono: 'Share Tech Mono', monospace;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: var(--font-body);
+    font-size: 17px;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* NOISE OVERLAY */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.4;
+  }
+
+  /* ── HEADER ── */
+  header {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 48px;
+    height: 64px;
+    background: rgba(10,10,10,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .logo {
+    font-family: var(--font-display);
+    font-size: 28px;
+    letter-spacing: 4px;
+    color: var(--white);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .logo span {
+    color: var(--orange);
+  }
+
+  .logo-tag {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    color: var(--grey);
+    letter-spacing: 2px;
+    border: 1px solid var(--border-bright);
+    padding: 2px 6px;
+    margin-top: 2px;
+  }
+
+  nav {
+    display: flex;
+    gap: 32px;
+    align-items: center;
+  }
+
+  nav a {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--grey);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  nav a:hover { color: var(--orange); }
+
+  .nav-cta {
+    background: var(--orange) !important;
+    color: var(--black) !important;
+    padding: 8px 20px;
+    font-weight: 700;
+    transition: background 0.2s !important;
+  }
+
+  .nav-cta:hover { background: var(--orange-dim) !important; }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    padding-top: 64px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-bg-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255,92,26,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,92,26,0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+  }
+
+  .hero-bg-radial {
+    position: absolute;
+    top: 30%;
+    right: 0;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(255,92,26,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .hero-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 80px 48px 80px 80px;
+    position: relative;
+    z-index: 2;
+  }
+
+  .hero-eyebrow {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 4px;
+    color: var(--orange);
+    text-transform: uppercase;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .hero-eyebrow::before {
+    content: '';
+    display: block;
+    width: 40px;
+    height: 1px;
+    background: var(--orange);
+  }
+
+  h1 {
+    font-family: var(--font-display);
+    font-size: clamp(72px, 8vw, 120px);
+    line-height: 0.92;
+    letter-spacing: 2px;
+    color: var(--white);
+    margin-bottom: 8px;
+  }
+
+  h1 .accent {
+    color: var(--orange);
+    display: block;
+  }
+
+  .hero-subtitle {
+    font-family: var(--font-body);
+    font-size: 18px;
+    font-weight: 500;
+    color: var(--grey-light);
+    line-height: 1.5;
+    margin: 28px 0 40px;
+    max-width: 440px;
+    border-left: 2px solid var(--orange);
+    padding-left: 20px;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .btn-primary {
+    background: var(--orange);
+    color: var(--black);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 14px 32px;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.2s;
+    clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
+  }
+
+  .btn-primary:hover {
+    background: var(--orange-dim);
+    transform: translateY(-2px);
+  }
+
+  .btn-secondary {
+    color: var(--grey-light);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: color 0.2s;
+  }
+
+  .btn-secondary:hover { color: var(--orange); }
+
+  .btn-secondary::after {
+    content: '→';
+    font-size: 16px;
+  }
+
+  .hero-stats {
+    display: flex;
+    gap: 48px;
+    margin-top: 64px;
+    padding-top: 40px;
+    border-top: 1px solid var(--border);
+  }
+
+  .stat-num {
+    font-family: var(--font-display);
+    font-size: 48px;
+    color: var(--white);
+    line-height: 1;
+  }
+
+  .stat-num span { color: var(--orange); }
+
+  .stat-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--grey);
+    text-transform: uppercase;
+    margin-top: 4px;
+  }
+
+  .hero-visual {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 80px 40px;
+    z-index: 2;
+  }
+
+  .hero-diagram {
+    width: 100%;
+    max-width: 440px;
+    aspect-ratio: 1;
+    position: relative;
+  }
+
+  .diagram-ring {
+    position: absolute;
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    animation: spin-slow 20s linear infinite;
+  }
+
+  .diagram-ring:nth-child(1) {
+    inset: 0;
+    border-color: rgba(255,92,26,0.2);
+    animation-duration: 25s;
+  }
+
+  .diagram-ring:nth-child(2) {
+    inset: 12%;
+    border-color: rgba(255,92,26,0.12);
+    animation-duration: 18s;
+    animation-direction: reverse;
+  }
+
+  .diagram-ring:nth-child(3) {
+    inset: 28%;
+    border-color: rgba(255,92,26,0.25);
+    animation-duration: 12s;
+  }
+
+  .diagram-ring::before {
+    content: '';
+    position: absolute;
+    top: -3px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 6px;
+    height: 6px;
+    background: var(--orange);
+    border-radius: 50%;
+  }
+
+  .diagram-center {
+    position: absolute;
+    inset: 38%;
+    background: var(--panel);
+    border: 1px solid var(--border-bright);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+  }
+
+  .diagram-center-text {
+    font-family: var(--font-display);
+    font-size: 22px;
+    color: var(--orange);
+    letter-spacing: 2px;
+    text-align: center;
+    line-height: 1.1;
+  }
+
+  .diagram-node {
+    position: absolute;
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: 1px;
+    color: var(--grey);
+    text-transform: uppercase;
+    text-align: center;
+    background: var(--panel);
+    border: 1px solid var(--border-bright);
+    padding: 6px 10px;
+    white-space: nowrap;
+  }
+
+  .node-1 { top: 2%; left: 50%; transform: translateX(-50%); }
+  .node-2 { top: 50%; right: -2%; transform: translateY(-50%); }
+  .node-3 { bottom: 2%; left: 50%; transform: translateX(-50%); }
+  .node-4 { top: 50%; left: -5%; transform: translateY(-50%); }
+
+  @keyframes spin-slow { to { transform: rotate(360deg); } }
+
+  /* ── SERVICES ── */
+  section {
+    padding: 120px 80px;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: 64px;
+    gap: 24px;
+  }
+
+  .section-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 4px;
+    color: var(--orange);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .section-label::before {
+    content: '//';
+    opacity: 0.5;
+  }
+
+  h2 {
+    font-family: var(--font-display);
+    font-size: clamp(40px, 5vw, 72px);
+    line-height: 0.95;
+    letter-spacing: 2px;
+  }
+
+  .section-line {
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+    max-width: 240px;
+    margin-bottom: 8px;
+  }
+
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+  }
+
+  .service-card {
+    background: var(--dark);
+    padding: 48px 40px;
+    position: relative;
+    overflow: hidden;
+    transition: background 0.3s;
+  }
+
+  .service-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    height: 2px;
+    background: var(--orange);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s;
+  }
+
+  .service-card:hover { background: var(--panel); }
+  .service-card:hover::before { transform: scaleX(1); }
+
+  .service-num {
+    font-family: var(--font-display);
+    font-size: 80px;
+    color: var(--border-bright);
+    line-height: 1;
+    margin-bottom: 24px;
+    transition: color 0.3s;
+  }
+
+  .service-card:hover .service-num { color: rgba(255,92,26,0.15); }
+
+  .service-icon {
+    font-size: 28px;
+    margin-bottom: 16px;
+    display: block;
+  }
+
+  .service-title {
+    font-family: var(--font-display);
+    font-size: 28px;
+    letter-spacing: 2px;
+    color: var(--white);
+    margin-bottom: 12px;
+  }
+
+  .service-desc {
+    font-size: 15px;
+    color: var(--grey);
+    line-height: 1.7;
+    font-weight: 400;
+  }
+
+  /* ── WHY US ── */
+  #nosotros {
+    background: var(--dark);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+  }
+
+  .about-text p {
+    color: var(--grey-light);
+    font-size: 17px;
+    line-height: 1.8;
+    margin-bottom: 20px;
+  }
+
+  .about-text p strong {
+    color: var(--white);
+    font-weight: 600;
+  }
+
+  .features-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .features-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    padding: 24px 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .features-list li:first-child { border-top: 1px solid var(--border); }
+
+  .feat-icon {
+    width: 40px;
+    height: 40px;
+    background: var(--orange-glow);
+    border: 1px solid rgba(255,92,26,0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+
+  .feat-title {
+    font-family: var(--font-body);
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--white);
+    letter-spacing: 1px;
+    margin-bottom: 4px;
+  }
+
+  .feat-desc {
+    font-size: 14px;
+    color: var(--grey);
+    line-height: 1.6;
+  }
+
+  /* ── RESINA ── */
+  .resin-banner {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    padding: 60px;
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    align-items: center;
+    gap: 48px;
+    margin: 0 80px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .resin-banner::before {
+    content: 'RESINA';
+    position: absolute;
+    font-family: var(--font-display);
+    font-size: 200px;
+    color: rgba(255,92,26,0.03);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    white-space: nowrap;
+    pointer-events: none;
+  }
+
+  .resin-stat {
+    text-align: center;
+  }
+
+  .resin-big {
+    font-family: var(--font-display);
+    font-size: 64px;
+    color: var(--orange);
+    line-height: 1;
+  }
+
+  .resin-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--grey);
+    text-transform: uppercase;
+    margin-top: 8px;
+  }
+
+  .resin-content h3 {
+    font-family: var(--font-display);
+    font-size: 40px;
+    letter-spacing: 2px;
+    margin-bottom: 16px;
+  }
+
+  .resin-content p {
+    color: var(--grey-light);
+    font-size: 16px;
+    line-height: 1.7;
+  }
+
+  /* ── GALLERY ── */
+  #galeria {
+    padding-bottom: 0;
+  }
+
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--border);
+    margin-top: 64px;
+  }
+
+  .gallery-item {
+    aspect-ratio: 1;
+    background: var(--panel);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .gallery-item .gallery-placeholder {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, var(--panel) 0%, var(--dark) 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    transition: transform 0.4s;
+  }
+
+  .gallery-item:hover .gallery-placeholder { transform: scale(1.04); }
+
+  .gallery-item .overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(10,10,10,0.6);
+    display: flex;
+    align-items: flex-end;
+    padding: 20px;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .gallery-item:hover .overlay { opacity: 1; }
+
+  .gallery-tag {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--orange);
+    text-transform: uppercase;
+    background: rgba(10,10,10,0.8);
+    padding: 6px 12px;
+    border-left: 2px solid var(--orange);
+  }
+
+  .glyph {
+    font-size: 40px;
+    opacity: 0.15;
+  }
+
+  .glyph-label {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: 3px;
+    color: var(--grey);
+    text-transform: uppercase;
+    opacity: 0.6;
+  }
+
+  /* ── CONTACT ── */
+  #contacto {
+    background: var(--dark);
+    border-top: 1px solid var(--border);
+  }
+
+  .contact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: start;
+  }
+
+  .contact-info h3 {
+    font-family: var(--font-display);
+    font-size: 48px;
+    letter-spacing: 2px;
+    line-height: 1.1;
+    margin-bottom: 24px;
+  }
+
+  .contact-info h3 span { color: var(--orange); }
+
+  .contact-info p {
+    color: var(--grey-light);
+    font-size: 16px;
+    line-height: 1.7;
+    margin-bottom: 40px;
+  }
+
+  .contact-links {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .contact-link {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    text-decoration: none;
+    padding: 16px 20px;
+    border: 1px solid var(--border);
+    transition: all 0.2s;
+    color: var(--white);
+  }
+
+  .contact-link:hover {
+    border-color: var(--orange);
+    background: var(--orange-glow);
+  }
+
+  .contact-link-icon {
+    font-size: 20px;
+    width: 40px;
+    text-align: center;
+  }
+
+  .contact-link-text {
+    flex: 1;
+  }
+
+  .contact-link-label {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: 2px;
+    color: var(--grey);
+    text-transform: uppercase;
+    margin-bottom: 2px;
+  }
+
+  .contact-link-value {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--white);
+  }
+
+  .contact-link-arrow {
+    color: var(--orange);
+    font-size: 18px;
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+
+  .contact-link:hover .contact-link-arrow { opacity: 1; }
+
+  /* FORM */
+  .contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--grey);
+    text-transform: uppercase;
+  }
+
+  input, textarea, select {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    color: var(--white);
+    font-family: var(--font-body);
+    font-size: 16px;
+    padding: 12px 16px;
+    outline: none;
+    transition: border-color 0.2s;
+    width: 100%;
+  }
+
+  input:focus, textarea:focus, select:focus {
+    border-color: var(--orange);
+  }
+
+  select option { background: var(--dark); }
+
+  textarea {
+    resize: vertical;
+    min-height: 120px;
+  }
+
+  .form-submit {
+    background: var(--orange);
+    color: var(--black);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 16px 32px;
+    border: none;
+    cursor: pointer;
+    transition: background 0.2s;
+    width: 100%;
+    clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
+  }
+
+  .form-submit:hover { background: var(--orange-dim); }
+
+  .form-note {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--grey);
+    text-align: center;
+    letter-spacing: 1px;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--black);
+    border-top: 1px solid var(--border);
+    padding: 48px 80px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+
+  .footer-logo {
+    font-family: var(--font-display);
+    font-size: 24px;
+    letter-spacing: 4px;
+    color: var(--white);
+  }
+
+  .footer-logo span { color: var(--orange); }
+
+  .footer-links {
+    display: flex;
+    gap: 24px;
+  }
+
+  .footer-links a {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--grey);
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+
+  .footer-links a:hover { color: var(--orange); }
+
+  .footer-copy {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--border-bright);
+    letter-spacing: 1px;
+  }
+
+  /* ── ANIMATIONS ── */
+  .fade-in {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+
+  .fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    header { padding: 0 24px; }
+    nav { gap: 16px; }
+    nav a:not(.nav-cta) { display: none; }
+
+    section { padding: 80px 24px; }
+
+    .hero { grid-template-columns: 1fr; }
+    .hero-visual { display: none; }
+    .hero-content { padding: 60px 24px; }
+
+    .services-grid { grid-template-columns: 1fr; }
+    .about-grid { grid-template-columns: 1fr; gap: 40px; }
+    .gallery-grid { grid-template-columns: repeat(2, 1fr); }
+    .contact-grid { grid-template-columns: 1fr; gap: 48px; }
+    .form-row { grid-template-columns: 1fr; }
+    .resin-banner { margin: 0 24px; grid-template-columns: 1fr; text-align: center; }
+    footer { flex-direction: column; text-align: center; padding: 40px 24px; }
+  }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: var(--black); }
+  ::-webkit-scrollbar-thumb { background: var(--border-bright); }
+  ::-webkit-scrollbar-thumb:hover { background: var(--orange); }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <a href="#inicio" class="logo">
+    SOLV<span>3D</span>
+    <span class="logo-tag">IMPRESIONES</span>
+  </a>
+  <nav>
+    <a href="#servicios">Servicios</a>
+    <a href="#nosotros">Nosotros</a>
+    <a href="#galeria">Galería</a>
+    <a href="#contacto">Contacto</a>
+    <a href="https://wa.me/5491130498153" target="_blank" class="nav-cta">Cotizar →</a>
+  </nav>
+</header>
+
+<!-- HERO -->
+<section id="inicio" class="hero">
+  <div class="hero-bg-grid"></div>
+  <div class="hero-bg-radial"></div>
+
+  <div class="hero-content">
+    <div class="hero-eyebrow">Buenos Aires · Desde 2014</div>
+    <h1>
+      RESOLVEMOS
+      <span class="accent">PROBLEMAS</span>
+      IMPRIMIMOS
+    </h1>
+
+    <p class="hero-subtitle">
+      ¿Se te rompió una pieza y no conseguís el repuesto? ¿Tenés una idea y necesitás un prototipo? Contanos el desafío — nosotros lo materializamos.
+    </p>
+
+    <div class="hero-actions">
+      <a href="https://wa.me/5491130498153" target="_blank" class="btn-primary">Pedir presupuesto</a>
+      <a href="#servicios" class="btn-secondary">Ver servicios</a>
+    </div>
+
+    <div class="hero-stats">
+      <div>
+        <div class="stat-num">10<span>+</span></div>
+        <div class="stat-label">Años de experiencia</div>
+      </div>
+      <div>
+        <div class="stat-num">2</div>
+        <div class="stat-label">Tecnologías</div>
+      </div>
+      <div>
+        <div class="stat-num">∞</div>
+        <div class="stat-label">Posibilidades</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-visual">
+    <div class="hero-diagram">
+      <div class="diagram-ring"></div>
+      <div class="diagram-ring"></div>
+      <div class="diagram-ring"></div>
+      <div class="diagram-center">
+        <div class="diagram-center-text">SOLV<br>3D</div>
+      </div>
+      <div class="diagram-node node-1">Filamento FDM</div>
+      <div class="diagram-node node-2">Resina SLA</div>
+      <div class="diagram-node node-3">Diseño 3D</div>
+      <div class="diagram-node node-4">Repuestos</div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="servicios">
+  <div class="section-header">
+    <div>
+      <div class="section-label">Qué hacemos</div>
+      <h2>SERVICIOS</h2>
+    </div>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="services-grid">
+    <div class="service-card fade-in">
+      <div class="service-num">01</div>
+      <span class="service-icon">⚙️</span>
+      <div class="service-title">RÉPLICA DE REPUESTOS</div>
+      <p class="service-desc">¿No conseguís una pieza descontinuada? La escaneamos o modelamos y la imprimimos. Plásticos técnicos resistentes a temperatura y esfuerzo mecánico.</p>
+    </div>
+    <div class="service-card fade-in" style="transition-delay: 0.1s">
+      <div class="service-num">02</div>
+      <span class="service-icon">🏗️</span>
+      <div class="service-title">MAQUETAS Y PROTOTIPOS</div>
+      <p class="service-desc">De la idea al objeto en días. Arquitectura, ingeniería, producto — hacemos la maqueta o prototipo funcional que necesitás para presentar o testear.</p>
+    </div>
+    <div class="service-card fade-in" style="transition-delay: 0.2s">
+      <div class="service-num">03</div>
+      <span class="service-icon">🖨️</span>
+      <div class="service-title">IMPRESIÓN 3D GENERAL</div>
+      <p class="service-desc">Traé tu archivo STL o cuéntanos tu idea. Trabajamos con filamento (FDM) y resina (SLA) según el nivel de detalle y resistencia que tu proyecto requiera.</p>
+    </div>
+    <div class="service-card fade-in" style="transition-delay: 0.3s">
+      <div class="service-num">04</div>
+      <span class="service-icon">💎</span>
+      <div class="service-title">IMPRESIÓN EN RESINA</div>
+      <p class="service-desc">Máxima precisión y detalle superficial. Ideal para joyería, miniaturas, modelos dentales y piezas con geometrías complejas donde cada micron importa.</p>
+    </div>
+    <div class="service-card fade-in" style="transition-delay: 0.4s">
+      <div class="service-num">05</div>
+      <span class="service-icon">📐</span>
+      <div class="service-title">DISEÑO Y MODELADO</div>
+      <p class="service-desc">Si no tenés el archivo, lo creamos. Modelado 3D desde cero o a partir de referencia fotográfica. Entregamos el archivo listo para imprimir o producir.</p>
+    </div>
+    <div class="service-card fade-in" style="transition-delay: 0.5s">
+      <div class="service-num">06</div>
+      <span class="service-icon">🔧</span>
+      <div class="service-title">PROYECTOS A MEDIDA</div>
+      <p class="service-desc">¿Tenés algo que no encaja en ninguna categoría? Contanos. Llevamos más de 10 años resolviendo problemas que parecían imposibles.</p>
+    </div>
+  </div>
+</section>
+
+<!-- RESIN BANNER -->
+<div class="resin-banner fade-in">
+  <div class="resin-stat">
+    <div class="resin-big">SLA</div>
+    <div class="resin-label">Tecnología de resina</div>
+  </div>
+  <div class="resin-content">
+    <h3>CALIDAD Y DETALLE<br>EN RESINA</h3>
+    <p>La impresión en resina permite capturar detalles imposibles para el filamento. Superficies lisas, geometrías complejas, tolerancias mínimas — cuando el acabado importa, usamos resina.</p>
+  </div>
+  <div class="resin-stat">
+    <div class="resin-big">FDM</div>
+    <div class="resin-label">Filamento técnico</div>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section id="nosotros">
+  <div class="about-grid">
+    <div>
+      <div class="section-label">Quiénes somos</div>
+      <h2>MÁS DE 10 AÑOS<br>MATERIALIZANDO<br>IDEAS</h2>
+    </div>
+    <div class="about-text fade-in">
+      <p>
+        Somos <strong>SOLV3D Impresiones</strong>, una organización especializada en impresión 3D con más de una década de experiencia en Buenos Aires.
+      </p>
+      <p>
+        No solo imprimimos archivos — <strong>resolvemos problemas</strong>. Desde el repuesto que el mercado ya no fabrica hasta el prototipo de tu próximo producto, trabajamos con vos para encontrar la solución más eficiente.
+      </p>
+      <p>
+        Combinamos tecnología de <strong>filamento FDM</strong> para piezas funcionales y resistentes, y <strong>resina SLA</strong> para proyectos que requieren el más alto nivel de detalle superficial.
+      </p>
+    </div>
+  </div>
+
+  <ul class="features-list" style="margin-top: 64px;">
+    <li class="fade-in">
+      <div class="feat-icon">⚡</div>
+      <div>
+        <div class="feat-title">RESPUESTA RÁPIDA</div>
+        <div class="feat-desc">Cotización por WhatsApp con respuesta en el día. Sin formularios complicados, sin burocracia.</div>
+      </div>
+    </li>
+    <li class="fade-in" style="transition-delay:0.1s">
+      <div class="feat-icon">🎯</div>
+      <div>
+        <div class="feat-title">ASESORAMIENTO TÉCNICO</div>
+        <div class="feat-desc">Te recomendamos el material y tecnología adecuada para cada proyecto. Filamento o resina según lo que necesites.</div>
+      </div>
+    </li>
+    <li class="fade-in" style="transition-delay:0.2s">
+      <div class="feat-icon">🔄</div>
+      <div>
+        <div class="feat-title">ITERACIÓN HASTA EL RESULTADO</div>
+        <div class="feat-desc">Si el prototipo no es exactamente lo que buscabas, ajustamos. Tu satisfacción es parte del proceso.</div>
+      </div>
+    </li>
+    <li class="fade-in" style="transition-delay:0.3s">
+      <div class="feat-icon">📍</div>
+      <div>
+        <div class="feat-title">BASADOS EN BUENOS AIRES</div>
+        <div class="feat-desc">Trabajamos en zona metropolitana con envíos a todo el país. Podés pasar a buscar personalmente coordinando previamente.</div>
+      </div>
+    </li>
+  </ul>
+</section>
+
+<!-- GALLERY -->
+<section id="galeria">
+  <div class="section-header">
+    <div>
+      <div class="section-label">Trabajos realizados</div>
+      <h2>FOTOS Y<br>REFERENCIAS</h2>
+    </div>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="gallery-grid">
+    <div class="gallery-item">
+      <div class="gallery-placeholder">
+        <div class="glyph">⚙️</div>
+        <div class="glyph-label">Repuesto</div>
+      </div>
+      <div class="overlay"><span class="gallery-tag">Réplica de repuesto</span></div>
+    </div>
+    <div class="gallery-item">
+      <div class="gallery-placeholder">
+        <div class="glyph">🏗️</div>
+        <div class="glyph-label">Maqueta</div>
+      </div>
+      <div class="overlay"><span class="gallery-tag">Maqueta arquitectónica</span></div>
+    </div>
+    <div class="gallery-item">
+      <div class="gallery-placeholder">
+        <div class="glyph">💎</div>
+        <div class="glyph-label">Resina</div>
+      </div>
+      <div class="overlay"><span class="gallery-tag">Impresión en resina</span></div>
+    </div>
+    <div class="gallery-item">
+      <div class="gallery-placeholder">
+        <div class="glyph">🖨️</div>
+        <div class="glyph-label">FDM</div>
+      </div>
+      <div class="overlay"><span class="gallery-tag">Filamento técnico</span></div>
+    </div>
+    <div class="gallery-item">
+      <div class="gallery-placeholder">
+        <div class="glyph">📐</div>
+        <div class="glyph-label">Prototipo</div>
+      </div>
+      <div class="overlay"><span class="gallery-tag">Prototipo funcional</span></div>
+    </div>
+    <div class="gallery-item">
+      <div class="gallery-placeholder">
+        <div class="glyph">🔩</div>
+        <div class="glyph-label">Mecánica</div>
+      </div>
+      <div class="overlay"><span class="gallery-tag">Pieza mecánica</span></div>
+    </div>
+    <div class="gallery-item">
+      <div class="gallery-placeholder">
+        <div class="glyph">🎨</div>
+        <div class="glyph-label">Detalle</div>
+      </div>
+      <div class="overlay"><span class="gallery-tag">Alta resolución</span></div>
+    </div>
+    <div class="gallery-item">
+      <div class="gallery-placeholder">
+        <div class="glyph">🔧</div>
+        <div class="glyph-label">Custom</div>
+      </div>
+      <div class="overlay"><span class="gallery-tag">Proyecto a medida</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contacto">
+  <div class="section-header">
+    <div>
+      <div class="section-label">Hablemos</div>
+      <h2>PEDÍ TU<br>PRESUPUESTO</h2>
+    </div>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="contact-grid">
+    <div class="contact-info">
+      <h3>CONTANOS TU<br><span>PROYECTO</span></h3>
+      <p>La mejor forma es por WhatsApp — respondemos a la brevedad. También podés mandarnos un mail o seguirnos en Instagram para ver trabajos anteriores.</p>
+
+      <div class="contact-links">
+        <a href="https://wa.me/5491130498153" target="_blank" class="contact-link">
+          <div class="contact-link-icon">📱</div>
+          <div class="contact-link-text">
+            <div class="contact-link-label">WhatsApp</div>
+            <div class="contact-link-value">011 3049-8153</div>
+          </div>
+          <div class="contact-link-arrow">→</div>
+        </a>
+        <a href="mailto:solv3d.impresiones@gmail.com" class="contact-link">
+          <div class="contact-link-icon">✉️</div>
+          <div class="contact-link-text">
+            <div class="contact-link-label">Email</div>
+            <div class="contact-link-value">solv3d.impresiones@gmail.com</div>
+          </div>
+          <div class="contact-link-arrow">→</div>
+        </a>
+        <a href="https://www.instagram.com/solv3d_impresiones" target="_blank" class="contact-link">
+          <div class="contact-link-icon">📸</div>
+          <div class="contact-link-text">
+            <div class="contact-link-label">Instagram</div>
+            <div class="contact-link-value">@solv3d_impresiones</div>
+          </div>
+          <div class="contact-link-arrow">→</div>
+        </a>
+      </div>
+    </div>
+
+    <div>
+      <form class="contact-form" onsubmit="handleSubmit(event)">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="nombre">Nombre</label>
+            <input type="text" id="nombre" name="nombre" placeholder="Tu nombre" required>
+          </div>
+          <div class="form-group">
+            <label for="telefono">Teléfono</label>
+            <input type="tel" id="telefono" name="telefono" placeholder="11  xxxx-xxxx">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="servicio">Tipo de proyecto</label>
+          <select id="servicio" name="servicio">
+            <option value="">Seleccioná...</option>
+            <option value="repuesto">Réplica de repuesto</option>
+            <option value="maqueta">Maqueta / Prototipo</option>
+            <option value="resina">Impresión en resina</option>
+            <option value="fdm">Impresión en filamento</option>
+            <option value="diseño">Necesito diseño + impresión</option>
+            <option value="otro">Otro</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="mensaje">Descripción del proyecto</label>
+          <textarea id="mensaje" name="mensaje" placeholder="Contanos tu proyecto, qué necesitás, medidas aproximadas, material preferido..."></textarea>
+        </div>
+        <button type="submit" class="form-submit">Enviar consulta →</button>
+        <p class="form-note">O escribinos directamente por WhatsApp al 011 3049-8153</p>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">SOLV<span>3D</span></div>
+  <div class="footer-links">
+    <a href="#servicios">Servicios</a>
+    <a href="#nosotros">Nosotros</a>
+    <a href="#galeria">Galería</a>
+    <a href="#contacto">Contacto</a>
+    <a href="#privacidad">Privacidad</a>
+  </div>
+  <div class="footer-copy">© 2024 SOLV3D Impresiones — Buenos Aires</div>
+</footer>
+
+<script>
+  // Scroll animations
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+  // Form submit → redirect to WhatsApp
+  function handleSubmit(e) {
+    e.preventDefault();
+    const nombre = document.getElementById('nombre').value;
+    const servicio = document.getElementById('servicio').value;
+    const mensaje = document.getElementById('mensaje').value;
+    const text = `Hola SOLV3D! Soy ${nombre}. Consulta sobre: ${servicio}. ${mensaje}`;
+    window.open(`https://wa.me/5491130498153?text=${encodeURIComponent(text)}`, '_blank');
+  }
+
+  // Active nav link on scroll
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('nav a[href^="#"]');
+
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(sec => {
+      if (window.scrollY >= sec.offsetTop - 100) current = sec.id;
+    });
+    navLinks.forEach(link => {
+      link.style.color = link.getAttribute('href') === `#${current}` ? 'var(--orange)' : '';
+    });
+  });
+</script>
+
+</body>
+</html>
